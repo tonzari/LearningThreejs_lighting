@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import {RectAreaLightHelper} from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
 
 /**
  * Base
@@ -18,14 +19,26 @@ const scene = new THREE.Scene()
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
-scene.add(ambientLight)
+const ambLight = new THREE.AmbientLight(0xF04FFF, 0.1)
+const dirLight = new THREE.DirectionalLight(0xffff44, 0.4)
+const hemLight = new THREE.HemisphereLight(0xff0000, 0x00ff00, 0.1)
+const pointLight = new THREE.PointLight(0xff34f0, 1, 10)
+const rectAreaLight = new THREE.RectAreaLight(0x0000ff, 3)
+const spotLight = new THREE.SpotLight(0xFFFF00, 0.5, 30, Math.PI * 0.05, 1, 1)
 
-const pointLight = new THREE.PointLight(0xffffff, 0.5)
-pointLight.position.x = 2
-pointLight.position.y = 3
-pointLight.position.z = 4
-scene.add(pointLight)
+hemLight.position.set(-1,2,-2)
+rectAreaLight.position.set(10,10,6)
+rectAreaLight.lookAt(0,0,0)
+pointLight.position.set(0,.1,2)
+spotLight.position.set(3,3,3)
+spotLight.lookAt(0,0,0)
+
+scene.add(spotLight, hemLight, rectAreaLight)
+
+const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight)
+const spotLightHelper = new THREE.SpotLightHelper(spotLight)
+const hemLightHelper = new THREE.HemisphereLightHelper(hemLight, 0.2)
+scene.add(spotLightHelper, hemLightHelper, rectAreaLightHelper)
 
 /**
  * Objects
